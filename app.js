@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log("Eagle");
                     time += 7;
                     break;
-            case 2: currentlyColliding = true;
+            case 11: currentlyColliding = true;
                     element.mdiv.style.backgroundImage = "url('./obstacle/')";        
                     console.log("Foot");
                     scoreCount += 25;
@@ -230,6 +230,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log("Siren");
                     time += 7;
                     break;
+            case 11:currentlyColliding = true;gameOver();break;
+            case 111:break;
           }
         } 
       

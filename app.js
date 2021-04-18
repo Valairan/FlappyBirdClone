@@ -18,7 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
   });
-
+  let speed = 2;
+  let projectileSpeed = 3;
+  let normalSpeed = 2;
+  let changed = false;
   let elementContainer = [];
   const backgroundArray = ["Beach", "Capital", "Krakow", "Lake", "Mountain"];
   const obstacles = [
@@ -108,29 +111,72 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const generateObstacle = () => {
     let obstacleLeft = 400;
+    let projectileLeft = 400;
     let randomHeight = 62 + Math.random() * 380;
     let obstacleBottom = randomHeight;
+    let projectileBottom = randomHeight;
 
     const obstacle = document.createElement("div");
+    const projectile = document.createElement("div");
 
     if (!isGameOver) {
       obstacle.classList.add("obstacle");
     }
+    if (!isGameOver) {
+      projectile.classList.add("obstacle");
+    }
 
-    let obstacleNumber = Math.floor(Math.random() * 6);
+    let obstacleNumber =  Math.floor(Math.random() * 6);
+
 
     gameDisplay.appendChild(obstacle);
-
+    gameDisplay.appendChild(projectile);
+    obstacleNames = obstacles[obstacleNumber];
     obstacle.style.backgroundImage = `url('./obstacle/${obstacles[obstacleNumber]}')`;
 
     obstacle.style.left = obstacleLeft + "px";
-
+    projectile.style.left = projectileLeft + "px";
     obstacle.style.bottom = obstacleBottom + "px";
-
+    projectile.style.bottom = projectileBottom - 30 + "px";
     elementContainer.push({ number: obstacleNumber, mdiv: obstacle })
 
+    if(obstacleNumber === 0){
+      projectile.style.backgroundImage = `url('./obstacle/Fireball.gif')`;
+      projectile.style.visibility = "hidden";
+      elementContainer.push({ number: 11, mdiv: projectile }) 
+    }
+    else if(obstacleNumber === 2){
+      projectile.style.backgroundImage = `url('./obstacle/Ball.png')`;
+      projectile.style.visibility = "hidden";
+      elementContainer.push({ number: 111, mdiv: projectile })
+    }   
+    const moveProjectile = () => {
+
+      if(projectileLeft < 300){
+        speed = projectileSpeed;
+        projectile.style.visibility = "visible";
+        
+      }
+
+      projectileLeft -= speed;
+      projectile.style.left = projectileLeft + "px";
+
+      if (projectileLeft === -10) {
+        clearInterval(projectiletimerId);
+        gameDisplay.removeChild(projectile);
+        score.innerHTML = scoreCount;
+      }
+
+      if (birdBottom <= 60 || birdBottom === 470) {
+        clearInterval(projectiletimerId);
+        gameOver();
+      }
+    };
+    let projectiletimerId = setInterval(moveProjectile, 20);
+
     const moveObstacle = () => {
-      obstacleLeft -= 2;
+
+      obstacleLeft -= normalSpeed;
       obstacle.style.left = obstacleLeft + "px";
 
       if (obstacleLeft === -10) {

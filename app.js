@@ -182,7 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (obstacleLeft === -10) {
         clearInterval(timerId);
         gameDisplay.removeChild(obstacle);
-        scoreCount += 10;
         score.innerHTML = scoreCount;
       }
 

@@ -52,6 +52,13 @@ body {
   position: absolute;
 }
 
+.projectiles {
+  height: 22px; 
+  width: 22px;
+  background-repeat: no-repeat;
+  position: absolute;
+}
+
 .instruction {
   margin-top: 50px;
   color: white;

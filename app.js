@@ -28,10 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let birdBottom = 250;
   let birdLeft = 100;
   let isGameOver = false;
+  let popupBottom = 0;
+  let popupLeft = 0;
 
-  let gravity = 2;
+  let caught = false;
+
+  let gravity = 0;
   let time = 60;
   let scoreCount = 0;
+
+  let hasStarted = false;
 
   timer.innerHTML = time;
   score.innerHTML = scoreCount;
@@ -97,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (birdBottom < 470)
           jump();
         jumpSound.play();
+        hasStarted = true;
 
       }
 
@@ -143,9 +150,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-
-
   const startGame = () => {
+
+
+
     birdBottom -= gravity;
     bird.style.left = birdLeft + "px";
     bird.style.bottom = birdBottom + "px";
@@ -159,10 +167,11 @@ document.addEventListener("DOMContentLoaded", () => {
     elementContainer.forEach(element => {
       num = isOverlapping(bird, element);
 
-      console.log(currentlyNotColliding);
-
       if (num.overlapState) {
         if (currentlyNotColliding) {
+
+          const popup = document.createElement("div");
+
           switch (num.number) {
             case 0: currentlyNotColliding = false;
               gameOver();
@@ -171,34 +180,79 @@ document.addEventListener("DOMContentLoaded", () => {
               element.mdiv.style.backgroundImage = "url('./obstacle/EaglePickup.gif')";
               time += 7;
               collectSoundTime.play();
+              popup.classList.add("dragon");
+              gameDisplay.appendChild(popup);
+              popup.style.backgroundImage = "url('./obstacle/')";
+              popup.style.bottom = element.mdiv.style.bottom;
+              popup.style.left = element.mdiv.style.left;
+
+              elementRemoval(popup);
 
               elementContainer = arrayRemove(elementContainer, element);
               break;
             case 111: currentlyNotColliding = false;
-              element.mdiv.style.backgroundImage = "url('./obstacle/BallPickUp.gif')";
+              caught = true;
               bird.style.backgroundImage = "url('./LeperchaunCatch.gif')";
-              time += 7;
+              element.mdiv.style.backgroundImage = "url('./obstacle/')";
+              popup.classList.add("dragon");
+              gameDisplay.appendChild(popup);
+              popup.style.backgroundImage = "url('./obstacle/BallPickUp.gif')";
+              popup.style.bottom = element.mdiv.style.bottom;
+              popup.style.left = element.mdiv.style.left;
+
+              stateChange();
+              elementRemoval(popup);
+
+              scoreCount += 125;
               collectSoundTime.play();
+
               elementContainer = arrayRemove(elementContainer, element);
               break;
             case 3: currentlyNotColliding = false;
-              element.mdiv.style.backgroundImage = "url('./obstacle/FlagPickup.gif')";
-              elementContainer
-              elementContainer = arrayRemove(elementContainer, element);
+              element.mdiv.style.backgroundImage = "url('./obstacle/')";
               scoreCount += 25;
               collectSoundTime.play();
 
+              popup.classList.add("dragon");
+              gameDisplay.appendChild(popup);
+              popup.style.backgroundImage = "url('./obstacle/FlagPickup.gif')";
+              popup.style.bottom = element.mdiv.style.bottom;
+              popup.style.left = element.mdiv.style.left;
+
+              elementRemoval(popup);
+
+              elementContainer = arrayRemove(elementContainer, element);
               break;
             case 4: scoreCount += 75;
               currentlyNotColliding = false;
-              element.mdiv.style.backgroundImage = "url('./obstacle/CloverPickup.gif')";
+              element.mdiv.style.backgroundImage = "url('./obstacle/')";
+              collectSoundTime.play();
+
+              popup.classList.add("dragon");
+              gameDisplay.appendChild(popup);
+              popup.style.backgroundImage = "url('./obstacle/CloverPickup.gif')";
+              popup.style.bottom = element.mdiv.style.bottom;
+              popup.style.left = element.mdiv.style.left;
+
+              elementRemoval(popup);
+
               elementContainer = arrayRemove(elementContainer, element);
               break;
             case 5: currentlyNotColliding = false;
               time += 7;
-              element.mdiv.style.backgroundImage = "url('./obstacle/SirenPickup.gif')";
+              element.mdiv.style.backgroundImage = "url('./obstacle/')";
               time += 7;
               collectSoundTime.play();
+
+
+              popup.classList.add("dragon");
+              gameDisplay.appendChild(popup);
+              popup.style.backgroundImage = "url('./obstacle/SirenPickup.gif')";
+              popup.style.bottom = element.mdiv.style.bottom;
+              popup.style.left = element.mdiv.style.left;
+
+              elementRemoval(popup);
+
               elementContainer = arrayRemove(elementContainer, element);
               break;
             case 11: currentlyColliding = false; gameOver(); break;
@@ -211,6 +265,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   };
+
+  function stateChange() {
+    setTimeout(function () {
+       bird.style.backgroundImage = "url(LeprechaunFallGIF.gif)";
+       caught = false;
+    }, 1000);
+}
+
+function elementRemoval(removeElt) {
+  setTimeout(function () {
+     gameDisplay.removeChild(removeElt);
+  }, 1000);
+}
 
   let gameTimerId = setInterval(startGame, 20);
   startGame.setTimeout
@@ -229,8 +296,11 @@ document.addEventListener("DOMContentLoaded", () => {
       gravity = 0;
       birdBottom += 2;
       await timerJump(3); // then the created Promise can be awaited
+
     }
-    bird.style.backgroundImage = "url(LeprechaunFallGIF.gif)"
+    if(!caught){
+      bird.style.backgroundImage = "url(LeprechaunFallGIF.gif)";    }
+    
   }
 
   const control = (e) => {
@@ -247,20 +317,24 @@ document.addEventListener("DOMContentLoaded", () => {
     let obstacleBottom = randomHeight;
     let projectileBottomFire = randomHeight;
     let projectileBottomBall = 50;
+    let obstacleNumber = Math.floor(Math.random() * 6);
 
     const obstacle = document.createElement("div");
     const projectileFire = document.createElement("div");
     const projectileBall = document.createElement("div");
 
     if (!isGameOver) {
+    if(obstacleNumber === 0){
+      obstacle.classList.add("dragon");
+    }else{
       obstacle.classList.add("obstacle");
+    }
       projectileFire.classList.add("projectiles");
       projectileBall.classList.add("projectiles");
     }
 
-    let obstacleNumber = Math.floor(Math.random() * 6);
-
-
+    
+    
     gameDisplay.appendChild(obstacle);
     gameDisplay.appendChild(projectileFire);
     gameDisplay.appendChild(projectileBall);
@@ -281,8 +355,8 @@ document.addEventListener("DOMContentLoaded", () => {
       elementContainer.push({ number: 11, mdiv: projectileFire })
     }
     else if (obstacleNumber === 2) {
-      obstacle.style.bottom = 50 + "px";
-      projectileBall.style.bottom = 50 + "px";
+      obstacle.style.bottom = 30 + "px";
+      projectileBall.style.bottom = 15 + "px";
       projectileBall.style.backgroundImage = `url('./obstacle/Ball.png')`;
       projectileBall.style.visibility = "hidden";
       elementContainer.push({ number: 111, mdiv: projectileBall })
@@ -322,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (visibileNow) {
-          ballAngle = 5;
+          ballAngle = Math.floor(Math.random() * (5 - 1.5 + 1)) + 1.5;
       }
       else{
           ballAngle = 0;
@@ -330,20 +404,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
       projectileLeftBall -= speed;
       projectileBottomBall += ballAngle;
-      console.log(ballAngle);
       projectileBall.style.left = projectileLeftBall + "px";
-      
+      console.log(projectileLeftBall);
+
       projectileBall.style.bottom = projectileBottomBall + "px";
 
-      if (projectileLeftBall === -10) {
-        if (projectileBall.style.backgroundImage === "Ball.png")
-          timer -= 7;
+      if (projectileLeftBall === -100) {
+
+        console.log("--------------------------------");
+
+        originalString = `url(\"./obstacle/Ball.png\")`;
+        comparisonString = projectileBall.style.backgroundImage.toString();
+        if (comparisonString === originalString){
+          time -= 7;
+          console.log("Reduced time");
+        }
+          
         clearInterval(projectiletimerIdBall);
         gameDisplay.removeChild(projectileBall);
-        score.innerHTML = scoreCount;
       }
 
-      if (birdBottom <= 60 || birdBottom === 470) {
+      if (birdBottom <= 60 || birdBottom === 470) { 
         clearInterval(projectiletimerIdBall);
       }
     };
@@ -376,7 +457,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ChangeBackground = () => {
     let randomBackground = Math.floor(Math.random() * 4);
-    console.log(randomBackground);
     sky.style.backgroundImage = `url('./backgrounds/${backgroundArray[randomBackground]}Static.png')`;
     groundContainer.style.backgroundImage = `url('./backgrounds/${backgroundArray[randomBackground]}Ground.png')`;
   };

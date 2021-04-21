@@ -37,11 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let time = 60;
   let scoreCount = 0;
 
-  let hasStarted = false;
 
   timer.innerHTML = time;
   score.innerHTML = scoreCount;
-  sound = document.createElement("audio");
+  
+  const sound = document.createElement("audio");
   sound.src = "Sounds/PolishAnthem.mp3";
   sound.setAttribute("preload", "auto");
   sound.setAttribute("controls", "none");
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
   sound.play();
 
 
-  jumpSound = document.createElement("audio");
+  const jumpSound = document.createElement("audio");
   jumpSound.src = "Sounds/Jump.wav";
   jumpSound.setAttribute("preload", "auto");
   jumpSound.setAttribute("controls", "none");
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(this.jumpSound);
   jumpSound.loop = false;
 
-  collectSoundTime = document.createElement("audio");
+  const collectSoundTime = document.createElement("audio");
   collectSoundTime.src = "Sounds/Get_Item2.wav";
   collectSoundTime.setAttribute("preload", "auto");
   collectSoundTime.setAttribute("controls", "none");
@@ -67,25 +67,48 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(this.collectSoundTime);
   collectSoundTime.loop = false;
 
-  FireballShoot = document.createElement("audio");
+  const FireballShoot = document.createElement("audio");
   FireballShoot.src = "Sounds/Get_Item2.wav";
   FireballShoot.setAttribute("preload", "auto");
   FireballShoot.setAttribute("controls", "none");
   FireballShoot.style.display = "none";
   document.body.appendChild(this.collectSoundTime);
   FireballShoot.loop = false;
-  FireballShoot.play();
 
-  collectSoundScore = document.createElement("audio");
-  collectSoundScore.src = "Sounds/PolishAnthem.mp3";
-  collectSoundScore.setAttribute("preload", "auto");
-  collectSoundScore.setAttribute("controls", "none");
-  collectSoundScore.style.display = "none";
+  const BallPickup = document.createElement("audio");
+  BallPickup.src = "Sounds/BallPickup.wav";
+  BallPickup.setAttribute("preload", "auto");
+  BallPickup.setAttribute("controls", "none");
+  BallPickup.style.display = "none";
   document.body.appendChild(this.collectSoundScore);
-  collectSoundScore.loop = false;
-  collectSoundScore.play();
+  BallPickup.loop = false;
 
-  gameOverSound = document.createElement("audio");
+  const SirenPickup = document.createElement("audio");
+  SirenPickup.src = "Sounds/SirenPickup.wav";
+  SirenPickup.setAttribute("preload", "auto");
+  SirenPickup.setAttribute("controls", "none");
+  SirenPickup.style.display = "none";
+  document.body.appendChild(this.collectSoundScore);
+  SirenPickup.loop = false;
+  
+  const CloverPickup = document.createElement("audio");
+  CloverPickup.src = "Sounds/CloverPickup.wav";
+  CloverPickup.setAttribute("preload", "auto");
+  CloverPickup.setAttribute("controls", "none");
+  CloverPickup.style.display = "none";
+  document.body.appendChild(this.collectSoundScore);
+  CloverPickup.loop = false;
+
+  const FlagPickup = document.createElement("audio");
+  FlagPickup.src = "Sounds/FlagPickup.wav";
+  FlagPickup.setAttribute("preload", "auto");
+  FlagPickup.setAttribute("controls", "none");
+  FlagPickup.style.display = "none";
+  document.body.appendChild(this.collectSoundScore);
+  FlagPickup.loop = false;
+
+
+  const gameOverSound = document.createElement("audio");
   gameOverSound.src = "Sounds/Explode2.wav";
   gameOverSound.setAttribute("preload", "auto");
   gameOverSound.setAttribute("controls", "none");
@@ -204,14 +227,14 @@ document.addEventListener("DOMContentLoaded", () => {
               elementRemoval(popup);
 
               scoreCount += 125;
-              collectSoundTime.play();
+              BallPickup.play();
 
               elementContainer = arrayRemove(elementContainer, element);
               break;
             case 3: currentlyNotColliding = false;
               element.mdiv.style.backgroundImage = "url('./obstacle/')";
               scoreCount += 25;
-              collectSoundTime.play();
+              FlagPickup.play();
 
               popup.classList.add("dragon");
               gameDisplay.appendChild(popup);
@@ -226,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
             case 4: scoreCount += 75;
               currentlyNotColliding = false;
               element.mdiv.style.backgroundImage = "url('./obstacle/')";
-              collectSoundTime.play();
+              CloverPickup.play();
 
               popup.classList.add("dragon");
               gameDisplay.appendChild(popup);
@@ -242,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
               time += 7;
               element.mdiv.style.backgroundImage = "url('./obstacle/')";
               time += 7;
-              collectSoundTime.play();
+              SirenPickup.play();
 
 
               popup.classList.add("dragon");

@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   sound.setAttribute("preload", "auto");
   sound.setAttribute("controls", "none");
   sound.style.display = "none";
-  document.body.appendChild(this.sound);
+  document.body.appendChild(sound);
   sound.volume = 0.1;
   sound.play();
 
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
   jumpSound.setAttribute("preload", "auto");
   jumpSound.setAttribute("controls", "none");
   jumpSound.style.display = "none";
-  document.body.appendChild(this.jumpSound);
+  document.body.appendChild(jumpSound);
   jumpSound.loop = false;
 
   const collectSoundTime = document.createElement("audio");
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   collectSoundTime.setAttribute("preload", "auto");
   collectSoundTime.setAttribute("controls", "none");
   collectSoundTime.style.display = "none";
-  document.body.appendChild(this.collectSoundTime);
+  document.body.appendChild(collectSoundTime);
   collectSoundTime.loop = false;
 
   const FireballShoot = document.createElement("audio");
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
   FireballShoot.setAttribute("preload", "auto");
   FireballShoot.setAttribute("controls", "none");
   FireballShoot.style.display = "none";
-  document.body.appendChild(this.FireballShoot);
+  document.body.appendChild(FireballShoot);
   FireballShoot.loop = false;
 
   const BallPickup = document.createElement("audio");
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
   BallPickup.setAttribute("preload", "auto");
   BallPickup.setAttribute("controls", "none");
   BallPickup.style.display = "none";
-  document.body.appendChild(this.BallPickup);
+  document.body.appendChild(BallPickup);
   BallPickup.loop = false;
 
   const SirenPickup = document.createElement("audio");
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
   SirenPickup.setAttribute("preload", "auto");
   SirenPickup.setAttribute("controls", "none");
   SirenPickup.style.display = "none";
-  document.body.appendChild(this.SirenPickup);
+  document.body.appendChild(SirenPickup);
   SirenPickup.loop = false;
   
   const CloverPickup = document.createElement("audio");
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
   CloverPickup.setAttribute("preload", "auto");
   CloverPickup.setAttribute("controls", "none");
   CloverPickup.style.display = "none";
-  document.body.appendChild(this.CloverPickup);
+  document.body.appendChild(CloverPickup);
   CloverPickup.loop = false;
 
   const FlagPickup = document.createElement("audio");
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
   FlagPickup.setAttribute("preload", "auto");
   FlagPickup.setAttribute("controls", "none");
   FlagPickup.style.display = "none";
-  document.body.appendChild(this.FlagPickup);
+  document.body.appendChild(FlagPickup);
   FlagPickup.loop = false;
 
 
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
   gameOverSound.setAttribute("preload", "auto");
   gameOverSound.setAttribute("controls", "none");
   gameOverSound.style.display = "none";
-  document.body.appendChild(this.gameOverSound);
+  document.body.appendChild(gameOverSound);
   gameOverSound.loop = false;
 
 

@@ -15,11 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const backgroundArray = ["Beach", "Capital", "Krakow", "Lake", "Mountain"];
   const obstacles = [
     "Dragon.gif",
-    "Eagle.gif",
     "FootballPlayer.gif",
     "PolishFlag.png",
     "Shamrock.png",
+    "PolishFlag.png",
+    "Shamrock.png",
+
+  ];
+  const timedObstacles = [
     "Siren.gif",
+    "Eagle.gif",
   ];
   const timerJump = ms => new Promise(res => setTimeout(res, 0.001))
 
@@ -28,8 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let birdBottom = 250;
   let birdLeft = 100;
   let isGameOver = false;
-  let popupBottom = 0;
-  let popupLeft = 0;
+
 
   let caught = false;
 
@@ -168,14 +172,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    console.warn('Please provide valid HTMLElement object');
     return { number: 25, overlapState: overlap };
   }
 
 
   const startGame = () => {
-
-
 
     birdBottom -= gravity;
     bird.style.left = birdLeft + "px";
@@ -186,7 +187,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     timer.innerHTML = time;
     score.innerHTML = scoreCount;
-
+    if(time <= 0){
+      gameOver();
+    }
     elementContainer.forEach(element => {
       num = isOverlapping(bird, element);
 
@@ -199,13 +202,13 @@ document.addEventListener("DOMContentLoaded", () => {
             case 0: currentlyNotColliding = false;
               gameOver();
               break;
-            case 1: currentlyNotColliding = false;
-              element.mdiv.style.backgroundImage = "url('./obstacle/EaglePickup.gif')";
+            case 100: currentlyNotColliding = false;
+              element.mdiv.style.opacity = 0; // "url('./obstacle/')";
               time += 7;
               collectSoundTime.play();
               popup.classList.add("dragon");
               gameDisplay.appendChild(popup);
-              popup.style.backgroundImage = "url('./obstacle/')";
+              popup.style.backgroundImage = "url('./obstacle/EaglePickup.gif')";
               popup.style.bottom = element.mdiv.style.bottom;
               popup.style.left = element.mdiv.style.left;
 
@@ -216,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
             case 111: currentlyNotColliding = false;
               caught = true;
               bird.style.backgroundImage = "url('./LeperchaunCatch.gif')";
-              element.mdiv.style.backgroundImage = "url('./obstacle/')";
+              element.mdiv.style.opacity = 0; //"url('./obstacle/')";
               popup.classList.add("dragon");
               gameDisplay.appendChild(popup);
               popup.style.backgroundImage = "url('./obstacle/BallPickUp.gif')";
@@ -231,8 +234,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
               elementContainer = arrayRemove(elementContainer, element);
               break;
-            case 3: currentlyNotColliding = false;
-              element.mdiv.style.backgroundImage = "url('./obstacle/')";
+            case 2: case 4: currentlyNotColliding = false;
+              element.mdiv.style.opacity = 0; //"url('./obstacle/')";
               scoreCount += 25;
               FlagPickup.play();
 
@@ -246,9 +249,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
               elementContainer = arrayRemove(elementContainer, element);
               break;
-            case 4: scoreCount += 75;
+            case 3: case 5: scoreCount += 75;
               currentlyNotColliding = false;
-              element.mdiv.style.backgroundImage = "url('./obstacle/')";
+              element.mdiv.style.opacity = 0; //"url('./obstacle/')";
               CloverPickup.play();
 
               popup.classList.add("dragon");
@@ -261,9 +264,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
               elementContainer = arrayRemove(elementContainer, element);
               break;
-            case 5: currentlyNotColliding = false;
+            case 99: currentlyNotColliding = false;
               time += 7;
-              element.mdiv.style.backgroundImage = "url('./obstacle/')";
+              element.mdiv.style.opacity = 0; //"url('./obstacle/')";
               time += 7;
               SirenPickup.play();
 
@@ -377,7 +380,7 @@ function elementRemoval(removeElt) {
       projectileFire.style.visibility = "hidden";
       elementContainer.push({ number: 11, mdiv: projectileFire })
     }
-    else if (obstacleNumber === 2) {
+    else if (obstacleNumber === 1) {
       obstacle.style.bottom = 30 + "px";
       projectileBall.style.bottom = 15 + "px";
       projectileBall.style.backgroundImage = `url('./obstacle/Ball.png')`;
@@ -424,25 +427,22 @@ function elementRemoval(removeElt) {
       else{
           ballAngle = 0;
       }
+      console.log(projectileBall.style.opacity + " , " + projectileLeftBall);
 
       projectileLeftBall -= speed;
       projectileBottomBall += ballAngle;
       projectileBall.style.left = projectileLeftBall + "px";
-      console.log(projectileLeftBall);
 
       projectileBall.style.bottom = projectileBottomBall + "px";
-
-      if (projectileLeftBall === -100) {
-
-        console.log("--------------------------------");
-
-        originalString = `url(\"./obstacle/Ball.png\")`;
-        comparisonString = projectileBall.style.backgroundImage.toString();
-        if (comparisonString === originalString){
-          time -= 7;
-          console.log("Reduced time");
+      
+      if (projectileLeftBall <= -10) {
+        
+        if (projectileBall.style.opacity === "0"){
+          console.log("Time -5");
+          time -= 5;
         }
-          
+        console.log(projectileBall.style.opacity + " ");
+        
         clearInterval(projectiletimerIdBall);
         gameDisplay.removeChild(projectileBall);
       }
@@ -473,10 +473,51 @@ function elementRemoval(removeElt) {
     let timerId = setInterval(moveObstacle, 20);
     if (!isGameOver) {
       setTimeout(generateObstacle, 2000);
+      setTimeout(moveProjectileFire, 2000);
+      setTimeout(moveProjectileBall, 2000);
+    }
+  };
+
+  const generateTimedObstacle = () => {
+    let obstacleLeft = 400;
+    let randomHeight = 62 + Math.random() * 380;
+    let obstacleBottom = randomHeight;
+
+    let obstacleNumber = Math.floor(Math.random() * 2);
+    let displacement = Math.floor(Math.random() * 10);
+    const timedObstacle = document.createElement("div");
+
+    if (!isGameOver) {
+      timedObstacle.classList.add("obstacle");
+    }
+
+    gameDisplay.appendChild(timedObstacle);
+    timedObstacle.style.backgroundImage = `url('./obstacle/${timedObstacles[obstacleNumber]}')`;
+    timedObstacle.style.left = obstacleLeft + displacement + "px";
+    timedObstacle.style.bottom = obstacleBottom + "px";
+
+    elementContainer.push({ number: obstacleNumber + 99, mdiv: timedObstacle })
+  
+    const moveTimedObstacle = () => {
+
+      obstacleLeft -= normalSpeed;
+      timedObstacle.style.left = obstacleLeft + "px";
+
+      if (obstacleLeft === -10) {
+        clearInterval(timerIdOther);
+        gameDisplay.removeChild(timedObstacle);
+        score.innerHTML = scoreCount;
+      }
+    };
+    let timerIdOther = setInterval(moveTimedObstacle, 20);
+    if (!isGameOver) {
+      setTimeout(generateTimedObstacle, 10000);
     }
   };
 
   generateObstacle();
+  generateTimedObstacle();
+
 
   const ChangeBackground = () => {
     let randomBackground = Math.floor(Math.random() * 4);
@@ -494,7 +535,6 @@ function elementRemoval(removeElt) {
     clearInterval(gameTimerId);
     clearInterval(backgroundChange);
 
-    console.log("Game over");
     gameOverSound.play();
 
     bird.style.backgroundImage = "url(LeprechaunDead.png)"
